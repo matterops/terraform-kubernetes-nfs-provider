@@ -11,7 +11,7 @@ resource "kubernetes_service_account" "this" {
   }
 
   secret {
-    name = kubernetes_secret.this.metadata.0.name
+    name = kubernetes_secret.this.metadata[0].name
   }
 }
 
