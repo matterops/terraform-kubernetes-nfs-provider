@@ -9,6 +9,16 @@ resource "kubernetes_service_account" "this" {
     name      = "${kubernetes_namespace.this.metadata[0].name}-service-account"
     namespace = kubernetes_namespace.this.metadata[0].name
   }
+
+  secret {
+    name = kubernetes_secret.this.metadata.0.name
+  }
+}
+
+resource "kubernetes_secret" "this" {
+  metadata {
+    name = "${kubernetes_namespace.this.metadata[0].name}-secret"
+  }
 }
 
 resource "kubernetes_cluster_role" "this" {
