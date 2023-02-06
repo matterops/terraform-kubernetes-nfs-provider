@@ -1,6 +1,6 @@
 # terraform-kubernetes-nfs-provider
 
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
+![GitHub tag](https://img.shields.io/github/v/tag/o0th/terraform-kubernetes-nfs-provider?style=for-the-badge)
 
 Terraform module which deploys a nfs-client-provisioner to Kubernetes
 
@@ -38,3 +38,7 @@ terraform init
 terraform plan
 terraform apply
 ```
+
+---
+
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/o0th/terraform-kubernetes-nfs-provider?style=for-the-badge)
