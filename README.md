@@ -1,5 +1,7 @@
 # terraform-kubernetes-nfs-provider
 
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
+
 Terraform module which deploys a nfs-client-provisioner to Kubernetes
 
 ## Requirements
