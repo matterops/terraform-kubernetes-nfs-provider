@@ -144,7 +144,7 @@ resource "kubernetes_deployment" "this" {
         service_account_name = kubernetes_service_account.this.metadata[0].name
 
         container {
-          name  = "${kubernetes_namespace.this.metadata[0].name}-pod"
+          name  = "${kubernetes_namespace.this.metadata[0].name}-deployment"
           image = var.image
 
           resources {
