@@ -1,29 +1,30 @@
-resource "kubernetes_namespace" "this" {
+resource "kubernetes_namespace_v1" "this" {
   metadata {
     name = var.namespace
   }
 }
 
-resource "kubernetes_service_account" "this" {
+resource "kubernetes_secret_v1" "this" {
   metadata {
-    name      = "${kubernetes_namespace.this.metadata[0].name}-service-account"
-    namespace = kubernetes_namespace.this.metadata[0].name
+    name      = "${kubernetes_namespace_v1.this.metadata[0].name}-secret"
+    namespace = kubernetes_namespace_v1.this.metadata[0].name
+  }
+}
+
+resource "kubernetes_service_account_v1" "this" {
+  metadata {
+    name      = "${kubernetes_namespace_v1.this.metadata[0].name}-service-account"
+    namespace = kubernetes_namespace_v1.this.metadata[0].name
   }
 
   secret {
-    name = kubernetes_secret.this.metadata[0].name
+    name = kubernetes_secret_v1.this.metadata[0].name
   }
 }
 
-resource "kubernetes_secret" "this" {
+resource "kubernetes_cluster_role_v1" "this" {
   metadata {
-    name = "${kubernetes_namespace.this.metadata[0].name}-secret"
-  }
-}
-
-resource "kubernetes_cluster_role" "this" {
-  metadata {
-    name = "${kubernetes_namespace.this.metadata[0].name}-cluster-role"
+    name = "${kubernetes_namespace_v1.this.metadata[0].name}-cluster-role"
   }
 
   rule {
@@ -51,28 +52,28 @@ resource "kubernetes_cluster_role" "this" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "this" {
+resource "kubernetes_cluster_role_binding_v1" "this" {
   metadata {
-    name = "${kubernetes_cluster_role.this.metadata[0].name}-role-binding"
+    name = "${kubernetes_cluster_role_v1.this.metadata[0].name}-binding"
   }
 
   role_ref {
     kind      = "ClusterRole"
     api_group = "rbac.authorization.k8s.io"
-    name      = kubernetes_cluster_role.this.metadata[0].name
+    name      = kubernetes_cluster_role_v1.this.metadata[0].name
   }
 
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.this.metadata[0].name
-    namespace = var.namespace
+    name      = kubernetes_service_account_v1.this.metadata[0].name
+    namespace = kubernetes_namespace_v1.this.metadata[0].name
   }
 }
 
-resource "kubernetes_role" "this" {
+resource "kubernetes_role_v1" "this" {
   metadata {
-    name      = "${kubernetes_namespace.this.metadata[0].name}-role"
-    namespace = kubernetes_namespace.this.metadata[0].name
+    name      = "${kubernetes_namespace_v1.this.metadata[0].name}-role"
+    namespace = kubernetes_namespace_v1.this.metadata[0].name
   }
 
   rule {
@@ -82,47 +83,47 @@ resource "kubernetes_role" "this" {
   }
 }
 
-resource "kubernetes_role_binding" "this" {
+resource "kubernetes_role_binding_v1" "this" {
   metadata {
-    name      = "${kubernetes_namespace.this.metadata[0].name}-role-binding"
-    namespace = kubernetes_namespace.this.metadata[0].name
+    name      = "${kubernetes_namespace_v1.this.metadata[0].name}-role-binding"
+    namespace = kubernetes_namespace_v1.this.metadata[0].name
   }
 
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.this.metadata[0].name
-    namespace = kubernetes_namespace.this.metadata[0].name
+    name      = kubernetes_service_account_v1.this.metadata[0].name
+    namespace = kubernetes_namespace_v1.this.metadata[0].name
   }
 
   role_ref {
     kind      = "Role"
-    name      = kubernetes_role.this.metadata[0].name
+    name      = kubernetes_role_v1.this.metadata[0].name
     api_group = "rbac.authorization.k8s.io"
   }
 }
 
-resource "kubernetes_storage_class" "this" {
+resource "kubernetes_storage_class_v1" "this" {
   metadata {
-    name = "${kubernetes_namespace.this.metadata[0].name}-storage-class"
+    name = "${kubernetes_namespace_v1.this.metadata[0].name}-storage-class"
   }
 
-  storage_provisioner = "ff1.dev/nfs"
+  storage_provisioner = "fuseim.pri/ifs"
 
   parameters = {
     "archiveOnDelete" = "false"
   }
 }
 
-resource "kubernetes_deployment" "this" {
+resource "kubernetes_deployment_v1" "this" {
   metadata {
-    name      = "${kubernetes_namespace.this.metadata[0].name}-deployment"
-    namespace = kubernetes_namespace.this.metadata[0].name
+    name      = "${kubernetes_namespace_v1.this.metadata[0].name}-deployment"
+    namespace = kubernetes_namespace_v1.this.metadata[0].name
   }
 
   spec {
     selector {
       match_labels = {
-        "app" = "${kubernetes_namespace.this.metadata[0].name}-deployment"
+        "app" = "${kubernetes_namespace_v1.this.metadata[0].name}-deployment"
       }
     }
 
@@ -135,16 +136,16 @@ resource "kubernetes_deployment" "this" {
     template {
       metadata {
         labels = {
-          "app" = "${kubernetes_namespace.this.metadata[0].name}-deployment"
+          "app" = "${kubernetes_namespace_v1.this.metadata[0].name}-deployment"
         }
       }
 
       spec {
 
-        service_account_name = kubernetes_service_account.this.metadata[0].name
+        service_account_name = kubernetes_service_account_v1.this.metadata[0].name
 
         container {
-          name  = "${kubernetes_namespace.this.metadata[0].name}-deployment"
+          name  = "${kubernetes_namespace_v1.this.metadata[0].name}-deployment"
           image = var.image
 
           resources {
@@ -182,7 +183,6 @@ resource "kubernetes_deployment" "this" {
             path   = var.nfs_path
           }
         }
-
       }
     }
   }
