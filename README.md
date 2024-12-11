@@ -4,15 +4,13 @@ Terraform module which deploys a nfs-client-provisioner to Kubernetes
 
 ## Usage
 
-Configuration
-
 ```terraform
 provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
 module "nfsc" {
-  source = "github.com/o0th/terraform-kubernetes-nfs-provider"
+  source = "github.com/o0th/terraform-kubernetes-nfs-provider?ref=1.0.0"
 
   namespace = "nfsc"
 
@@ -23,10 +21,17 @@ module "nfsc" {
 }
 ```
 
-Terraform
+### Inputs
 
-```bash
-terraform init
-terraform plan
-terraform apply
-```
+| Name         | Type     |
+|--------------|----------|
+| `namespace`  | `String` |
+| `nfs_server` | `String` |
+| `nfs_path`   | `String` |
+| `image`      | `String` |
+
+### Outputs
+
+| Name                 | Type     |
+|----------------------|----------|
+| `storage_class_name` | `String` |
