@@ -23,15 +23,15 @@ module "nfsc" {
 
 ### Inputs
 
-| Name         | Type     |
-|--------------|----------|
-| `namespace`  | `String` |
-| `nfs_server` | `String` |
-| `nfs_path`   | `String` |
-| `image`      | `String` |
+| Name         | Type     | Required |
+|--------------|:--------:|:--------:|
+| `namespace`  | `String` | `true`   |
+| `nfs_server` | `String` | `true`   |
+| `nfs_path`   | `String` | `true`   |
+| `image`      | `String` | `true`   |
 
 ### Outputs
 
 | Name                 | Type     |
-|----------------------|----------|
+|----------------------|:--------:|
 | `storage_class_name` | `String` |
