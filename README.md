@@ -10,7 +10,7 @@ provider "kubernetes" {
 }
 
 module "nfsc" {
-  source = "github.com/o0th/terraform-kubernetes-nfs-provider?ref=1.0.0"
+  source = "github.com/matterops/terraform-kubernetes-nfs-provider?ref=1.0.0"
 
   namespace = "nfsc"
 
